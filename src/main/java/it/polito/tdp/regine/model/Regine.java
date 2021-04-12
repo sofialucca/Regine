@@ -18,42 +18,40 @@ public class Regine {
 	//     [0, 2]
 	//            [0, 2, 1]
 	private int N;
-	private List<Integer> soluzione;
+	private List<List<Integer>> soluzione;
 	
-	public List<Integer>risolvi(int N){
+	public List<List<Integer>>risolvi(int N){
 		this.N=N;
 		//meglio array perchè dopo si usa numerose volte get e con una LinkedList non conviene
 		List<Integer >parziale=new ArrayList<Integer>();
+		this.soluzione=new ArrayList<>();
 		cerca(parziale, 0);
 		return this.soluzione;
 
 	}
 	
 	//cerca== true: trovato; cerca==false :cerca ancora
-	private boolean cerca(List<Integer>parziale, int livello) {
+	private void cerca(List<Integer>parziale, int livello) {
 		if(livello==N) {
 			// caso terminale
 			//System.out.println(parziale);
 			//this.soluzione=parziale; // stiamo creando un nuovo riferimento ma senza copiare il valore
-			this.soluzione=new ArrayList<>(parziale);
-			return true;
+			this.soluzione.add(new ArrayList<>(parziale));
+			
 		} else {
 			for(int colonna=0; colonna<N; colonna++) {
 				// if la possa nella casella [livello][colonna] è valida
 				// se sì, aggiungi a parziale e fai ricorsione
 				if(posValida(parziale,colonna)) {
 					parziale.add(colonna);
-					boolean trovato=cerca(parziale,livello+1);
-					if(trovato) {
-						return true;
-					}					
+					cerca(parziale,livello+1);
+								
 					//posso creare nuova copia di parziale a cui aggiungo la nuova colonna, tale che non bisogna fare backtracking
 						//-->non conveniente perchè molto costoso ricopiare dati
 
 					parziale.remove(parziale.size()-1); //backtracking
 				}
 			}
-			return false;
 		}
 	}
 
